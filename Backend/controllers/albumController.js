@@ -1,9 +1,16 @@
 const Album = require('../models/album');
+const Artista = require('../models/artista');
 
 // Función para obtener todos los álbumes
 const obtenerAlbums = async (req, res) => {
     try {
-        const albums = await Album.findAll();
+        const albums = await Album.findAll({
+            include: [
+                {
+                    model: Artista, // Debes importar el modelo Artista
+                }
+            ]
+        });
         res.status(200).json(albums);
     } catch (error) {
         console.error('Error al obtener los álbumes:', error);
@@ -14,13 +21,18 @@ const obtenerAlbums = async (req, res) => {
 // Función para crear un álbum
 const crearAlbum = async (req, res) => {
     try {
-        const { nombre, artistaId } = req.body;
+        const { nombre_album, fecha_album, duracion_album, cantidad_canciones, tipo, id_artista } = req.body;
 
-        if (!nombre || !artistaId) {
-            return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+        if (!nombre_album || !fecha_album || !duracion_album || !cantidad_canciones || !tipo || !id_artista) {
+            return res.status(400).json({ mensaje: 'Todos los campos son requeridos' });
         }
 
-        const nuevoAlbum = await Album.create({ nombre, artistaId });
+        const artista = await Artista.findByPk(id_artista);
+        if (!artista) {
+            return res.status(404).json({ mensaje: 'Artista no encontrado' });
+        }
+
+        const nuevoAlbum = await Album.create(req.body);
         res.status(201).json(nuevoAlbum);
     } catch (error) {
         console.error('Error al crear el álbum:', error);
@@ -32,15 +44,26 @@ const crearAlbum = async (req, res) => {
 const actualizarAlbum = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre, artistaId } = req.body;
+        const { nombre_album, fecha_album, duracion_album, cantidad_canciones, tipo, id_artista } = req.body;
 
         const album = await Album.findByPk(id);
         if (!album) {
             return res.status(404).json({ mensaje: 'Álbum no encontrado' });
         }
 
-        album.nombre = nombre || album.nombre;
-        album.artistaId = artistaId || album.artistaId;
+        if (id_artista) {
+            const artista = await Artista.findByPk(id_artista);
+            if (!artista) {
+                return res.status(404).json({ mensaje: 'Artista no encontrado' });
+            }
+        }
+
+        album.nombre_album = nombre_album || album.nombre_album;
+        album.fecha_album = fecha_album || album.fecha_album;
+        album.duracion_album = duracion_album || album.duracion_album;
+        album.cantidad_canciones = cantidad_canciones || album.cantidad_canciones;
+        album.tipo = tipo || album.tipo;
+        album.id_artista = id_artista || album.id_artista;
 
         await album.save();
         res.status(200).json(album);

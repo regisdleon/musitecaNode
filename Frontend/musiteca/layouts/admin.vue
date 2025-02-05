@@ -11,7 +11,7 @@
                    <li class="font-bold mx-6 text-gray-700"><NuxtLink to="/admin/artistaAdmin">Gestionar Artistas</NuxtLink></li>
                    <li class="font-bold mx-6 text-gray-700"><NuxtLink to="/admin/albumAdmin">Gestionar Album</NuxtLink></li>
                    <li class="font-bold mx-6 text-gray-700"><NuxtLink to="/admin/cancionAdmin">Gestionar Canción</NuxtLink></li>
-                   <li class="font-bold mx-6 text-gray-700"><NuxtLink to="#">Cerrar Sesión</NuxtLink></li>
+                   <li class="font-bold mx-6 text-gray-700" @click="cerrarSesion"><NuxtLink to="/">Cerrar Sesión</NuxtLink></li>
                 </ul>
             </div>
         </nav>
@@ -30,3 +30,13 @@
         </div>
     </footer>
 </template>
+
+<script>
+export default {
+  methods: {
+    cerrarSesion() {
+      localStorage.removeItem('token');
+    }
+  }
+}
+</script>

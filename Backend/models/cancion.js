@@ -11,9 +11,14 @@ const Cancion = sequelize.define("cancion", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-duracion: {
+  duracion: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  archivo_cancion: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: "",
   },
 }, {
   timestamps: true,

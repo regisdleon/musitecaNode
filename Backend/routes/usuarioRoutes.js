@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const verificarToken = require('../middleware/verificarToken');
 const usuarioController = require('../controllers/usuarioController');
+const Usuario = require('../models/usuario');
+const bcrypt = require('bcrypt');
 
 /**
  * @swagger
@@ -29,17 +31,30 @@ const usuarioController = require('../controllers/usuarioController');
  */
 router.post('/login', async (req, res) => {
     const { nombre_usuario, contrasena } = req.body;
-        console.log('Cuerpo de la solicitud:', req.body); // Log agregado
+    console.log('Cuerpo de la solicitud:', req.body); // Log agregado
 
-        // Validar la entrada del usuario
-        if (!nombre_usuario || !contrasena) {
-            // usar el error handler para lanzar este error y el error handler es el que envia esta respuesta
-            return res.status(400).json({ mensaje: 'Nombre de usuario y contraseña son obligatorios' });
-        }
+    // Validar la entrada del usuario
+    if (!nombre_usuario || !contrasena) {
+        return res.status(400).json({ mensaje: 'Nombre de usuario y contraseña son obligatorios' });
+    }
+
+    const usuario = await Usuario.findOne({ where: { nombre_usuario } });
+
+    // Verificar si el usuario existe
+    if (!usuario) {
+        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Comparar la contraseña proporcionada con la almacenada
+    const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+    
+    if (!contrasenaValida) {
+        return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+    }
+
+    const response = await usuarioController.iniciarSesion(nombre_usuario, contrasena)
         
-        const response = await usuarioController.iniciarSesion(nombre_usuario, contrasena)
-        
-        res.json(response)
+    res.json(response)
 });
 
 /**

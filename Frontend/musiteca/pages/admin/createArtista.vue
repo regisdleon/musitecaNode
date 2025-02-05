@@ -35,6 +35,10 @@
         </div>
   
         <button type="submit" class="submit-button">Crear Artista</button>
+
+        <NuxtLink to="/admin/artistaAdmin" class="block mt-4 text-center text-sm text-indigo-600 hover:text-indigo-500">
+        Volver a Administración de Artistas
+      </NuxtLink>
       </form>
     </div>
   </template>
