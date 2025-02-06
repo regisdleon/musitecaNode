@@ -49,62 +49,44 @@ const crearCancion = async (req, res) => {
 // Función para actualizar una canción
 const actualizarCancion = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nombre_cancion, genero_cancion, duracion, id_album } = req.body;
-
-        if (!nombre_cancion && !genero_cancion && !duracion && !id_album && !archivo_cancion) {
-            return res.status(400).json({ mensaje: 'No se han proporcionado cambios' });
+      const { id } = req.params;
+      const { nombre_cancion, genero_cancion, duracion, id_album, archivo_cancion } = req.body;
+  
+      if (!nombre_cancion && !genero_cancion && !duracion && !id_album && !archivo_cancion) {
+        return res.status(400).json({ mensaje: 'No se han proporcionado cambios' });
+      }
+  
+      const cancion = await Cancion.findByPk(id);
+      if (!cancion) {
+        return res.status(404).json({ mensaje: 'Canción no encontrada' });
+      }
+  
+      if (id_album) {
+        const album = await Album.findByPk(id_album);
+        if (!album) {
+          return res.status(404).json({ mensaje: 'Álbum no encontrado' });
         }
-
-        const cancion = await Cancion.findByPk(id);
-        if (!cancion) {
-            return res.status(404).json({ mensaje: 'Canción no encontrada' });
-        }
-
-        if (id_album) {
-            const album = await Album.findByPk(id_album);
-            if (!album) {
-                return res.status(404).json({ mensaje: 'Álbum no encontrado' });
-            }
-        }
-
-        cancion.nombre_cancion = nombre_cancion || cancion.nombre_cancion;
-        cancion.genero_cancion = genero_cancion || cancion.genero_cancion;
-        cancion.duracion = duracion || cancion.duracion;
-        cancion.id_album = id_album || cancion.id_album;
-        cancion.archivo_cancion = archivo_cancion || cancion.archivo_cancion;
-
-        await cancion.save();
-
-        const album = await Album.findByPk(cancion.id_album);
-        res.status(200).json({
-            ...cancion.toJSON(),
-            album
-        });
+      }
+  
+      cancion.nombre_cancion = nombre_cancion || cancion.nombre_cancion;
+      cancion.genero_cancion = genero_cancion || cancion.genero_cancion;
+      cancion.duracion = duracion || cancion.duracion;
+      cancion.id_album = id_album || cancion.id_album;
+      cancion.archivo_cancion = archivo_cancion || cancion.archivo_cancion;
+  
+      await cancion.save();
+  
+      const album = await Album.findByPk(cancion.id_album);
+      res.status(200).json({
+        ...cancion.toJSON(),
+        album
+      });
     } catch (error) {
-        console.error('Error al actualizar la canción:', error);
-        res.status(500).json({ mensaje: 'Error interno del servidor' });
+      console.error('Error al actualizar la canción:', error);
+      res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
-};
-
-// Función para eliminar una canción
-const eliminarCancion = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const cancion = await Cancion.findByPk(id);
-        if (!cancion) {
-            return res.status(404).json({ mensaje: 'Canción no encontrada' });
-        }
-
-        await cancion.destroy();
-        res.status(200).json({ mensaje: 'Canción eliminada exitosamente' });
-    } catch (error) {
-        console.error('Error al eliminar la canción:', error);
-        res.status(500).json({ mensaje: 'Error interno del servidor' });
-    }
-};
-
+  };
+  
 // Función para cargar un archivo de música
 const cargarArchivoMusica = async (req, res) => {
     try {
@@ -156,5 +138,20 @@ const cargarArchivoMusica = async (req, res) => {
     }
   };
 
+  // Función para obtener una cancion por su ID
+const obtenerCancionPorId = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const cancion = await Cancion.findByPk(id);
+      if (!cancion) {
+        return res.status(404).json({ mensaje: 'Cancion no encontrado' });
+      }
+      res.status(200).json(cancion);
+    } catch (error) {
+      console.error('Error al obtener la cancion:', error);
+      res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+  };
+
 // Exportar las funciones
-module.exports = { obtenerCanciones, crearCancion, actualizarCancion, eliminarCancion, descargarArchivoMusica, cargarArchivoMusica };
+module.exports = { obtenerCanciones, crearCancion, actualizarCancion, eliminarCancion, obtenerCancionPorId, descargarArchivoMusica, cargarArchivoMusica };

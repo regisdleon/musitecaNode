@@ -161,10 +161,75 @@ const eliminarCancion = async (id) => {
 };
 
 // Método para editar una canción
-const editarCancion = (id) => {
-  // Aquí puedes implementar la lógica para editar la canción
-  console.log(`Editar canción con ID: ${id}`);
-};
+const editarCancion = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+      };
+
+      const response = await fetch(`http://localhost:4000/api/canciones/${id}`, {
+        headers,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Crear un formulario de edición
+        const formulario = document.createElement('form');
+        formulario.innerHTML = `
+          <label for="nombre_cancion">Nombre de la canción:</label>
+          <input type="text" id="nombre_cancion" value="${data.nombre_cancion}"><br>
+          <label for="genero_cancion">Género de la canción:</label>
+          <input type="text" id="genero_cancion" value="${data.genero_cancion}"><br>
+          <label for="duracion">Duración de la canción:</label>
+          <input type="text" id="duracion" value="${data.duracion}"><br>
+          <label for="id_album">Álbum:</label>
+          <input type="text" id="id_album" value="${data.id_album}"><br>
+          <button type="submit">Guardar cambios</button>
+        `;
+
+        // Agregar el formulario a la página
+        document.body.appendChild(formulario);
+
+        // Agregar un evento de submit al formulario
+        formulario.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // Recuperar los datos del formulario
+          const nombre_cancion = document.getElementById('nombre_cancion').value;
+          const genero_cancion = document.getElementById('genero_cancion').value;
+          const duracion = document.getElementById('duracion').value;
+          const id_album = document.getElementById('id_album').value;
+
+          // Actualizar los datos de la canción en la base de datos
+          const respuesta = await fetch(`http://localhost:4000/api/canciones/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              nombre_cancion,
+              genero_cancion,
+              duracion,
+              id_album,
+            }),
+          });
+
+          // Recargar la lista de canciones después de editar
+          await cargarCanciones();
+
+          // Quitar el formulario de la página
+          formulario.remove();
+        });
+      } else {
+        console.error('Error al editar la canción:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al editar la canción:', error);
+    }
+  };
 
 // Definimos la metadata de la página
 definePageMeta({

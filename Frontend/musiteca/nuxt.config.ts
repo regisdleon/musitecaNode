@@ -4,10 +4,11 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@sidebase/nuxt-auth',
   ],
-  server: {
-    host: '0.0.0.0',
-    port: 3000,
-    ipv6Only: false,
+  runtimeConfig: {
+    public: {
+      host: '0.0.0.0',
+      port: 3000
+    },
   },
 
   app: {

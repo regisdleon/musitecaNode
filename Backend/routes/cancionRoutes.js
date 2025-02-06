@@ -21,6 +21,27 @@ router.get('/canciones', verificarToken, cancionController.obtenerCanciones);
 
 /**
  * @swagger
+ * /api/canciones/{id}:
+ *   get:
+ *     summary: Obtener una canción por su ID
+ *     description: Devuelve una canción específica por su ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la canción a obtener.
+ *     responses:
+ *       200:
+ *         description: Canción obtenida exitosamente.
+ *       404:
+ *         description: Canción no encontrada.
+ */
+router.get('/canciones/:id', verificarToken, cancionController.obtenerCancionPorId);
+
+/**
+ * @swagger
  * /api/canciones:
  *   post:
  *     summary: Crear una canción
