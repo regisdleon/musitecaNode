@@ -4,6 +4,11 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@sidebase/nuxt-auth',
   ],
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    ipv6Only: false,
+  },
 
   app: {
     head: {
@@ -59,11 +64,11 @@ export default defineNuxtConfig({
       allowHeaders: ['Content-Type', 'Authorization']
     }
 
-  },
-  server: {
-    host: '0.0.0.0',
-    port: 3000,
-  },
+  },  
+
+    // ...
+  
+    // ...
 
   compatibilityDate: '2025-01-15',
 });
