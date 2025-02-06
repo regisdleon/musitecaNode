@@ -5,6 +5,8 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth',
   ],
 
+  
+
   auth: {
     globalAppMiddleware: false, // Desactiva el middleware global
     provider: {
@@ -19,6 +21,8 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  
 
   compatibilityDate: '2025-01-15',
 
@@ -37,4 +41,5 @@ export default defineNuxtConfig({
       allowHeaders: ['Content-Type', 'Authorization']
     }
   },
+  
 });

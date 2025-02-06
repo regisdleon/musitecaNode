@@ -12,6 +12,12 @@
           <strong>Álbum:</strong> {{ cancion.album ? cancion.album.nombre_album : 'Sin álbum' }}
           <button @click="descargarArchivo(cancion)">Descargar</button>
           <button @click="reproducirArchivo(cancion)">Reproducir</button>
+          <button @click="editarCancion(cancion.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+            Editar
+          </button>
+          <button @click="eliminarCancion(cancion.id)" class="bg-red-400 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+            Eliminar
+          </button>
         </li>
       </ol>
     </div>
@@ -95,6 +101,69 @@ const reproducirArchivo = async (cancion) => {
   } catch (err) {
     console.error('Error al reproducir el archivo:', err);
   }
+};
+
+// Método para cargar las canciones
+const cargarCanciones = async () => {
+  try {
+    // Obtenemos el token de autenticación del localStorage
+    const token = localStorage.getItem('token');
+
+    // Configuramos la solicitud con el token en el header
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+    };
+
+    // Hacemos la solicitud a la API con el token en el header
+    const response = await fetch('http://localhost:4000/api/canciones', {
+      headers,
+    });
+
+    // Verificamos si la respuesta es exitosa
+    if (response.ok) {
+      // Obtenemos el cuerpo de la respuesta en formato JSON
+      const data = await response.json();
+
+      // Asignamos la respuesta a la variable canciones
+      canciones.value = data;
+    } else {
+      console.error('Error mostrando canciones:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error mostrando canciones:', error);
+  }
+};
+
+// Método para eliminar una canción
+const eliminarCancion = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+
+    const response = await fetch(`http://localhost:4000/api/canciones/${id}`, {
+      method: 'DELETE',
+      headers,
+    });
+
+    if (response.ok) {
+      // Recargar la lista de canciones después de eliminar
+      alert("Canción eliminada.")
+      await cargarCanciones();
+    } else {
+      console.error('Error eliminando la canción:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error eliminando la canción:', error);
+  }
+};
+
+// Método para editar una canción
+const editarCancion = (id) => {
+  // Aquí puedes implementar la lógica para editar la canción
+  console.log(`Editar canción con ID: ${id}`);
 };
 
 // Definimos la metadata de la página
