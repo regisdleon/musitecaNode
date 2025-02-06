@@ -21,6 +21,27 @@ router.get('/albums', verificarToken, albumController.obtenerAlbums);
 
 /**
  * @swagger
+ * /api/albums/{id}:
+ *   get:
+ *     summary: Obtener un álbum por su ID
+ *     description: Devuelve un álbum específico por su ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del álbum a obtener.
+ *     responses:
+ *       200:
+ *         description: Álbum obtenido exitosamente.
+ *       404:
+ *         description: Álbum no encontrado.
+ */
+router.get('/albums/:id', verificarToken, albumController.obtenerAlbumPorId);
+
+/**
+ * @swagger
  * /api/albums:
  *   post:
  *     summary: Crear un álbum

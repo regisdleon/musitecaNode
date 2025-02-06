@@ -60,8 +60,9 @@ export default defineNuxtConfig({
     }
 
   },
-  runtimeConfig: {
-    host: '0.0.0.0'
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
   },
 
   compatibilityDate: '2025-01-15',

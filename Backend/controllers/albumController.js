@@ -91,5 +91,26 @@ const eliminarAlbum = async (req, res) => {
     }
 };
 
+// Función para obtener un álbum por su ID
+const obtenerAlbumPorId = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const album = await Album.findByPk(id, {
+        include: [
+          {
+            model: Artista, // Debes importar el modelo Artista
+          }
+        ]
+      });
+      if (!album) {
+        return res.status(404).json({ mensaje: 'Álbum no encontrado' });
+      }
+      res.status(200).json(album);
+    } catch (error) {
+      console.error('Error al obtener el álbum:', error);
+      res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+  };
+
 // Exportar las funciones
-module.exports = { obtenerAlbums, crearAlbum, actualizarAlbum, eliminarAlbum };
+module.exports = { obtenerAlbums, crearAlbum, actualizarAlbum, eliminarAlbum,obtenerAlbumPorId };
