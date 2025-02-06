@@ -5,7 +5,28 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth',
   ],
 
-  
+  app: {
+    head: {
+      title: "Musiteca - Escucha musica",
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          hid: "description",
+          name: "description",
+          content: "Escuha musica",
+        },
+        { name: "keywords", content: "Escucha musica" },
+        { name: "author", content: "Regis Brayan de LRon Cabeza" },
+        { property: "og:title", content: "Musiteca - escucha musica" },
+        { property: "og:description", content: "Escuchar musica" },
+        { property: "og:image", content: "/logoMusiteca.png" }, // Ruta de tu logo
+        { property: "og:url", content: "https://musitecanode.onrender.com" }, // URL de tu sitio
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    },
+  },
+
 
   auth: {
     globalAppMiddleware: false, // Desactiva el middleware global
@@ -23,9 +44,6 @@ export default defineNuxtConfig({
   },
 
   
-
-  compatibilityDate: '2025-01-15',
-
   nitro: {
     devProxy: {
       '/api': {
@@ -40,6 +58,8 @@ export default defineNuxtConfig({
       credentials: true,
       allowHeaders: ['Content-Type', 'Authorization']
     }
+    
   },
-  
+
+    compatibilityDate: '2025-01-15',
 });

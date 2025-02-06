@@ -35,6 +35,10 @@
           </div>
         </form>
         <p v-if="error" class="mt-4 text-center text-sm text-red-600">{{ error }}</p>
+        <p class="mt-4 text-center">
+        ¿Registar?
+        <NuxtLink to="/register" class="text-purple-500 hover:underline">Registro</NuxtLink>
+      </p>
       </div>
     </div>
   </template>

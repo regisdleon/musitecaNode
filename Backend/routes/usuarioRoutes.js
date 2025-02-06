@@ -101,7 +101,7 @@ router.get('/usuarios', verificarToken, usuarioController.obtenerUsuarios);
  *       400:
  *         description: Todos los campos son obligatorios.
  */
-router.post('/usuarios', verificarToken, usuarioController.registrarUsuario);
+router.post('/usuarios', usuarioController.registrarUsuario);
 
 /**
  * @swagger
