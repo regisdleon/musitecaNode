@@ -7,6 +7,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       host: '0.0.0.0',
+      BACKEND_URL: process.env.BACKEND_URL,
+      FRONTEND_URL: process.env.FRONTEND_URL,
       port: 1000
     },
   },

@@ -26,6 +26,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#app';
+
+const config = useRuntimeConfig();
 
 // Variable reactiva para almacenar la lista de canciones
 const canciones = ref([]);
@@ -33,6 +36,7 @@ const canciones = ref([]);
 // Función que se ejecuta cuando el componente se monta
 onMounted(async () => {
   try {
+    
     // Obtenemos el token de autenticación del localStorage
     const token = localStorage.getItem('token');
 
@@ -42,7 +46,7 @@ onMounted(async () => {
     };
 
     // Hacemos la solicitud a la API con el token en el header
-    const response = await fetch('http://localhost:4000/api/canciones', {
+    const response = await fetch(`${config.public.BACKEND_URL}/api/canciones`, {
       headers,
     });
 
@@ -66,7 +70,7 @@ onMounted(async () => {
 const descargarArchivo = async (cancion) => {
   try {
     // Creamos un blob con el archivo seleccionado
-    const response = await fetch(`http://localhost:3000${cancion.archivo_cancion}`);
+    const response = await fetch(`${config.public.FRONTEND_URL}${cancion.archivo_cancion}`);
     const blob = await response.blob();
 
     // Creamos un objeto URL con el blob
@@ -89,7 +93,7 @@ const descargarArchivo = async (cancion) => {
 const reproducirArchivo = async (cancion) => {
   try {
     // Creamos un blob con el archivo seleccionado
-    const response = await fetch(`http://localhost:3000${cancion.archivo_cancion}`);
+    const response = await fetch(`${config.public.FRONTEND_URL}${cancion.archivo_cancion}`);
     const blob = await response.blob();
 
     // Creamos un objeto URL con el blob
@@ -115,7 +119,7 @@ const cargarCanciones = async () => {
     };
 
     // Hacemos la solicitud a la API con el token en el header
-    const response = await fetch('http://localhost:4000/api/canciones', {
+    const response = await fetch(`${config.public.BACKEND_URL}/api/canciones`, {
       headers,
     });
 
@@ -143,7 +147,7 @@ const eliminarCancion = async (id) => {
       'Content-Type': 'application/json',
     };
 
-    const response = await fetch(`http://localhost:4000/api/canciones/${id}`, {
+    const response = await fetch(`${config.public.BACKEND_URL}/api/canciones/${id}`, {
       method: 'DELETE',
       headers,
     });
@@ -169,7 +173,7 @@ const editarCancion = async (id) => {
         'Authorization': `Bearer ${token}`,
       };
 
-      const response = await fetch(`http://localhost:4000/api/canciones/${id}`, {
+      const response = await fetch(`${config.public.BACKEND_URL}/api/canciones/${id}`, {
         headers,
       });
 
@@ -207,7 +211,7 @@ formulario.innerHTML = `
           const archivo_cancion = document.getElementById('archivo_cancion').files[0];
 
           // Actualizar los datos de la canción en la base de datos
-          const respuesta = await fetch(`http://localhost:4000/api/canciones/${id}`, {
+          const respuesta = await fetch(`${config.public.BACKEND_URL}/api/canciones/${id}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
