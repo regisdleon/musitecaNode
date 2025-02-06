@@ -147,6 +147,7 @@ const editarAlbum = async (id) => {
 
         // Recargar la lista de álbumes después de editar
         await cargarAlbums();
+        formulario.remove();
       });
     } else {
       console.error('Error al editar el álbum:', response.statusText);

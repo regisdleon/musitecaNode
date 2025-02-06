@@ -82,5 +82,20 @@ const eliminarArtista = async (req, res) => {
     }
 };
 
+// Función para obtener un artista por su ID
+const obtenerArtistaPorId = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const artista = await Artista.findByPk(id);
+      if (!artista) {
+        return res.status(404).json({ mensaje: 'Artista no encontrado' });
+      }
+      res.status(200).json(artista);
+    } catch (error) {
+      console.error('Error al obtener el artista:', error);
+      res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+  };
+
 // Exportar las funciones
-module.exports = { obtenerArtistas, crearArtista, actualizarArtista, eliminarArtista };
+module.exports = { obtenerArtistas, crearArtista, actualizarArtista, eliminarArtista, obtenerArtistaPorId };

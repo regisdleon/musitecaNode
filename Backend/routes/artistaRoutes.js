@@ -105,4 +105,25 @@ router.put('/artistas/:id', verificarToken, artistaController.actualizarArtista)
  */
 router.delete('/artistas/:id', verificarToken, verificarRol(['admin']), artistaController.eliminarArtista);
 
+/**
+ * @swagger
+ * /api/artistas/{id}:
+ *   get:
+ *     summary: Obtener un artista por su ID
+ *     description: Devuelve un artista específico por su ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del artista a obtener.
+ *     responses:
+ *       200:
+ *         description: Artista obtenido exitosamente.
+ *       404:
+ *         description: Artista no encontrado.
+ */
+router.get('/artistas/:id', verificarToken, artistaController.obtenerArtistaPorId);
+
 module.exports = router;

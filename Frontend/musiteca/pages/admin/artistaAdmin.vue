@@ -113,6 +113,71 @@ const eliminarArtista = async (id) => {
     console.error('Error eliminando el artista:', error);
   }
 };
+const editarArtista = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const headers = {
+        'Authorization': `Bearer ${token}`,
+      };
+
+      const response = await fetch(`http://localhost:4000/api/artistas/${id}`, {
+        headers,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Crear un formulario de edición
+        const formulario = document.createElement('form');
+        formulario.innerHTML = `
+          <label for="nombre_artistico">Nombre del artista:</label>
+          <input type="text" id="nombre_artistico" value="${data.nombre_artistico}"><br>
+          <label for="inicio_actividad">Inicio de actividad:</label>
+          <input type="text" id="inicio_actividad" value="${data.inicio_actividad}"><br>
+          <label for="pais">País:</label>
+          <input type="text" id="pais" value="${data.pais}"><br>
+          <button type="submit">Guardar cambios</button>
+        `;
+
+        // Agregar el formulario a la página
+        document.body.appendChild(formulario);
+
+        // Agregar un evento de submit al formulario
+        formulario.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // Recuperar los datos del formulario
+          const nombre_artistico = document.getElementById('nombre_artistico').value;
+          const inicio_actividad = document.getElementById('inicio_actividad').value;
+          const pais = document.getElementById('pais').value;
+
+          // Actualizar los datos del artista en la base de datos
+          const respuesta = await fetch(`http://localhost:4000/api/artistas/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              nombre_artistico,
+              inicio_actividad,
+              pais,
+            }),
+          });
+
+          // Recargar la lista de artistas después de editar
+          await cargarArtistas();
+
+          // Quitar el formulario de la página
+          formulario.remove();
+        });
+      } else {
+        console.error('Error al editar el artista:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al editar el artista:', error);
+    }
+  };
 
 // Definimos la metadata de la página
 definePageMeta({
