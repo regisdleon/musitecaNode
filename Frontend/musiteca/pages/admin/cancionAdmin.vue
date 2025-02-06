@@ -160,6 +160,7 @@ const eliminarCancion = async (id) => {
   }
 };
 
+
 // Método para editar una canción
 const editarCancion = async (id) => {
     try {
@@ -176,18 +177,20 @@ const editarCancion = async (id) => {
         const data = await response.json();
 
         // Crear un formulario de edición
-        const formulario = document.createElement('form');
-        formulario.innerHTML = `
-          <label for="nombre_cancion">Nombre de la canción:</label>
-          <input type="text" id="nombre_cancion" value="${data.nombre_cancion}"><br>
-          <label for="genero_cancion">Género de la canción:</label>
-          <input type="text" id="genero_cancion" value="${data.genero_cancion}"><br>
-          <label for="duracion">Duración de la canción:</label>
-          <input type="text" id="duracion" value="${data.duracion}"><br>
-          <label for="id_album">Álbum:</label>
-          <input type="text" id="id_album" value="${data.id_album}"><br>
-          <button type="submit">Guardar cambios</button>
-        `;
+const formulario = document.createElement('form');
+formulario.innerHTML = `
+  <label for="nombre_cancion">Nombre de la canción:</label>
+  <input type="text" id="nombre_cancion" value="${data.nombre_cancion}"><br>
+  <label for="genero_cancion">Género de la canción:</label>
+  <input type="text" id="genero_cancion" value="${data.genero_cancion}"><br>
+  <label for="duracion">Duración de la canción:</label>
+  <input type="text" id="duracion" value="${data.duracion}"><br>
+  <label for="id_album">Álbum:</label>
+  <input type="text" id="id_album" value="${data.id_album}"><br>
+  <label for="archivo_cancion">Archivo de canción:</label>
+  <input type="file" id="archivo_cancion"><br>
+  <button type="submit">Guardar cambios</button>
+`;
 
         // Agregar el formulario a la página
         document.body.appendChild(formulario);
@@ -201,6 +204,7 @@ const editarCancion = async (id) => {
           const genero_cancion = document.getElementById('genero_cancion').value;
           const duracion = document.getElementById('duracion').value;
           const id_album = document.getElementById('id_album').value;
+          const archivo_cancion = document.getElementById('archivo_cancion').files[0];
 
           // Actualizar los datos de la canción en la base de datos
           const respuesta = await fetch(`http://localhost:4000/api/canciones/${id}`, {

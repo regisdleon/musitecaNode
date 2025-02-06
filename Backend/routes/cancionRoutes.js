@@ -66,7 +66,7 @@ router.get('/canciones/:id', verificarToken, cancionController.obtenerCancionPor
  *       400:
  *         description: Todos los campos son obligatorios.
  */
-router.post('/canciones', verificarToken, cancionController.crearCancion);
+router.post('/canciones/createCancion', verificarToken, cancionController.crearCancion);
 
 /**
  * @swagger

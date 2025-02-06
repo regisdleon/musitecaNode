@@ -86,7 +86,7 @@ const actualizarCancion = async (req, res) => {
       res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
   };
-  
+
 // Función para cargar un archivo de música
 const cargarArchivoMusica = async (req, res) => {
     try {
@@ -152,6 +152,23 @@ const obtenerCancionPorId = async (req, res) => {
       res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
   };
+  // Función para eliminar una canción
+const eliminarCancion = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const cancion = await Cancion.findByPk(id);
+        if (!cancion) {
+            return res.status(404).json({ mensaje: 'Canción no encontrada' });
+        }
+
+        await cancion.destroy();
+        res.status(200).json({ mensaje: 'Canción eliminada exitosamente' });
+    } catch (error) {
+        console.error('Error al eliminar la canción:', error);
+        res.status(500).json({ mensaje: 'Error interno del servidor' });
+    }
+};
 
 // Exportar las funciones
 module.exports = { obtenerCanciones, crearCancion, actualizarCancion, eliminarCancion, obtenerCancionPorId, descargarArchivoMusica, cargarArchivoMusica };
