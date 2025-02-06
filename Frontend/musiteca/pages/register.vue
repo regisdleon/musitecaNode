@@ -64,7 +64,7 @@ export default {
         if (response.ok) {
           const data = await response.json();
           alert('Usuario registrado exitosamente');
-          this.$router.push('/index');
+          this.$router.push('/');
         } else {
           throw new Error('Error al registrar el usuario');
         }

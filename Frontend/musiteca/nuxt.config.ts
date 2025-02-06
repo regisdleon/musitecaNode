@@ -43,7 +43,7 @@ export default defineNuxtConfig({
     },
   },
 
-  
+
   nitro: {
     devProxy: {
       '/api': {
@@ -58,8 +58,11 @@ export default defineNuxtConfig({
       credentials: true,
       allowHeaders: ['Content-Type', 'Authorization']
     }
-    
+
+  },
+  runtimeConfig: {
+    host: '0.0.0.0'
   },
 
-    compatibilityDate: '2025-01-15',
+  compatibilityDate: '2025-01-15',
 });
