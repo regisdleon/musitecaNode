@@ -52,6 +52,16 @@ const headers = {
   definePageMeta({
     layout: 'user',
   });
+
+  useHead({
+  title: "Lista de albumes - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Poder ver los albumes que contiene el sitio como usuario",
+    },
+  ],
+});
   </script>
   
   <style scoped>

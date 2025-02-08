@@ -75,4 +75,14 @@ export default {
     },
   },
 };
+
+useHead({
+  title: "Registrarse - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Crear una cuenta para poder acceder al sitio.",
+    },
+  ],
+});
 </script>

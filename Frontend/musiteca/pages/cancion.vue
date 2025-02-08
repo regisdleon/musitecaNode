@@ -7,7 +7,7 @@
           <strong>Nombre:</strong> {{ cancion.nombre_cancion }},
           <strong>Duración:</strong> {{ cancion.duracion }},
           <strong>Álbum:</strong> {{ cancion.album.id }}
-          <button @click="reproducirCancion(cancion.archivo_cancion)">Reproducir</button>
+          <button @click="reproducirArchivo(cancion.archivo_cancion)">Reproducir</button>
           <audio :id="cancion.nombre_cancion" :src="`http://localhost:3000${cancion.archivo_cancion}`" />
           
         </li>
@@ -18,6 +18,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+
+import { useRuntimeConfig } from '#app';
+
+const config = useRuntimeConfig();
+
 
 // Variable reactiva para almacenar la lista de canciones
 const canciones = ref([]);
@@ -51,16 +56,39 @@ onMounted(async () => {
   }
 });
 
-// Función para reproducir una canción
-function reproducirCancion(nombreCancion) {
-  const audio = document.getElementById(nombreCancion);
-  audio.play();
-}
+// Método para reproducir el archivo
+const reproducirArchivo = async (cancion) => {
+  try {
+    // Creamos un blob con el archivo seleccionado
+    const response = await fetch(`${config.public.FRONTEND_URL}${cancion}`);
+    const blob = await response.blob();
+
+    // Creamos un objeto URL con el blob
+    const url = URL.createObjectURL(blob);
+
+    // Creamos una ventana emergente para reproducir el archivo
+    const ventana = window.open(url, '_blank', 'width=800,height=600');
+    ventana.focus();
+  } catch (err) {
+    console.error('Error al reproducir el archivo:', err);
+  }
+};
 
 // Definimos la metadata de la página
 definePageMeta({
   layout: 'user',
 });
+
+useHead({
+  title: "Lista de canciones como usuario - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Poder ver las canciones como usuario",
+    },
+  ],
+});
+
 </script>
 
 <style scoped>

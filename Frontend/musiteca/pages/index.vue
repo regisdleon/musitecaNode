@@ -82,4 +82,13 @@
       },
     },
   };
+  useHead({
+  title: "Iniciar sesion - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Iniciar sesion.",
+    },
+  ],
+});
   </script>

@@ -54,6 +54,17 @@ onMounted(async () => {
   definePageMeta({
     layout: 'user',
   });
+
+  useHead({
+  title: "Lista de artistas como usuario - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Poder ver los artistas como usuario",
+    },
+  ],
+});
+
   </script>
 
 <style scoped>

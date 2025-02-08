@@ -9,4 +9,15 @@
 definePageMeta({
     layout: 'user'
 })
+
+useHead({
+  title: "Acerca del sitio - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Informacion acerca del sitio",
+    },
+  ],
+});
+
 </script>
