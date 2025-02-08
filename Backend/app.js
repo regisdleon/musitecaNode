@@ -1,19 +1,19 @@
 // Instancia de Sequelize para conectarse a la base de datos
-const sequelize = require("../helpers/database.js");
+const sequelize = require("/helpers/database.js");
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const createAdmin = require('../createAdmin.js'); // Importa la función createAdmin
-const usuarioRoutes = require('../routes/usuarioRoutes.js');
-const artistaRoutes = require('../routes/artistaRoutes.js');
-const albumRoutes = require('../routes/albumRoutes.js'); // Importar rutas de álbum
-const cancionRoutes = require('../routes/cancionRoutes.js'); // Importar rutas de canción
-const opinionRoutes = require('../routes/opinionRoutes.js'); // Importar rutas de opinión
+const createAdmin = require('./createAdmin.js'); // Importa la función createAdmin
+const usuarioRoutes = require('./routes/usuarioRoutes.js');
+const artistaRoutes = require('./routes/artistaRoutes.js');
+const albumRoutes = require('./routes/albumRoutes.js'); // Importar rutas de álbum
+const cancionRoutes = require('./routes/cancionRoutes.js'); // Importar rutas de canción
+const opinionRoutes = require('./routes/opinionRoutes.js'); // Importar rutas de opinión
 
 // app.js
-const verificarToken = require('../middleware/verificarToken.js');
-const verificarRol = require('../middleware/verificarRol.js');
+const verificarToken = require('./middleware/verificarToken.js');
+const verificarRol = require('./middleware/verificarRol.js');
 
 // Middlewares
 
