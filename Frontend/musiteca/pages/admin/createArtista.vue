@@ -102,6 +102,7 @@ const artista = ref({
 
 const crearArtista = async () => {
   try {
+    console.log('Enviando solicitud a la API...');
     await artistaServices.crearArtista(artista.value);
     alert('Artista creado exitosamente');
     artista.value = {
