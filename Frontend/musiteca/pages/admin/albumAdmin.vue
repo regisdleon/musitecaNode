@@ -121,6 +121,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#imports';
 
 const albums = ref([]);
 const showModal = ref(false);
@@ -132,6 +133,8 @@ const edicion = ref({
   cantidad_canciones: '',
   tipo: ''
 });
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 onMounted(async () => {
   await cargarAlbums();
@@ -140,7 +143,7 @@ onMounted(async () => {
 const cargarAlbums = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:4000/api/albums', {
+    const response = await fetch(`${apiBaseUrl}/api/albums`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -155,7 +158,7 @@ const cargarAlbums = async () => {
 const editarAlbum = async (id) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/albums/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/albums/${id}`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -173,7 +176,7 @@ const editarAlbum = async (id) => {
 const guardarCambios = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/albums/${albumEditId.value}`, {
+    const response = await fetch(`${apiBaseUrl}/api/albums/${albumEditId.value}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -200,7 +203,7 @@ const confirmarEliminacion = (id) => {
 const eliminarAlbum = async (id) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/albums/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/albums/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     });

@@ -59,15 +59,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#imports';
 
 const artistas = ref([]);
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
     
-    const response = await fetch('http://localhost:4000/api/artistas', { headers });
+    const response = await fetch(`${apiBaseUrl}/api/artistas`, { headers });
     
     if (response.ok) {
       artistas.value = await response.json();

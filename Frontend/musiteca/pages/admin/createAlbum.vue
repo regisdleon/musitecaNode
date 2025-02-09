@@ -173,7 +173,86 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#imports';
 
-// Mantener las mismas variables y lógica del script original
-// ... (el resto del script se mantiene igual)
+const nombre_album = ref('');
+const duracion_album = ref('');
+const cantidad_canciones = ref('');
+const tipo = ref('');
+const fecha_album = ref("")
+const id_artista = ref('');
+const artistas = ref([]);
+const error = ref('');
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
+
+// Obtener la lista de artistas al cargar la página
+onMounted(async () => {
+  try {
+    // Obtenemos el token de autenticación del localStorage
+    const token = localStorage.getItem('token');
+
+    // Configuramos la solicitud con el token en el header
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+    };
+
+    // Hacemos la solicitud a la API con el token en el header
+    const response = await fetch(`${apiBaseUrl}/api/artistas`, {
+      headers,
+    });
+
+    // Verificamos si la respuesta es exitosa
+    if (response.ok) {
+      // Obtenemos el cuerpo de la respuesta en formato JSON
+      const data = await response.json();
+
+      // Asignamos la respuesta a la variable artistas
+      artistas.value = data;
+    } else {
+      console.error('Error mostrando artistas:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error mostrando artistas:', error);
+  }
+});
+
+const crearAlbum = async () => {
+  try {
+    // Obtenemos el token de autenticación del localStorage
+    const token = localStorage.getItem('token');
+
+    // Configuramos la solicitud con el token en el header
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' // Agregamos el tipo de contenido
+    };
+
+    // Convertimos el cuerpo de la solicitud a JSON
+    const body = JSON.stringify({
+      nombre_album: nombre_album.value,
+      duracion_album: duracion_album.value,
+      cantidad_canciones: cantidad_canciones.value,
+      tipo: tipo.value,
+      id_artista: id_artista.value,
+      fecha_album: fecha_album.value
+    });
+
+    const response = await fetch(`${apiBaseUrl}/api/albums`, {
+      method: 'POST',
+      headers: headers, // Corregimos el nombre de la propiedad
+      body: body // Pasamos el cuerpo de la solicitud como JSON
+    });
+
+    if (response.ok) {
+      alert('Álbum creado exitosamente');
+      navigateTo('/admin/albumAdmin');
+    } else {
+      throw new Error(response.mensaje || 'Error al crear el álbum');
+    }
+  } catch (err) {
+    console.error('Error al crear el álbum:', err);
+    error.value = 'Error al crear el álbum. Inténtalo de nuevo.';
+  }
+};
 </script>

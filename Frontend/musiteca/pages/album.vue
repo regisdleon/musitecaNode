@@ -55,15 +55,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#imports';
 
 const albums = ref([]);
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
     
-    const response = await fetch('http://localhost:4000/api/albums', { headers });
+    const response = await fetch(`${apiBaseUrl}/api/albums`, { headers });
     
     if (response.ok) {
       albums.value = await response.json();

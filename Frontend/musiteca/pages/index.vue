@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import usuarioServices from "@/services/usuarioServices";
 
@@ -180,8 +180,7 @@ useHead({
   meta: [
     {
       name: "description",
-      content:
-        "Accede a tu cuenta de Musiteca para explorar nuestra colección musical exclusiva.",
+      content: "Accede a tu cuenta de Musiteca para explorar nuestra colección musical exclusiva.",
     },
   ],
 });
@@ -193,25 +192,46 @@ const router = useRouter();
 const loading = ref(false);
 const showPassword = ref(false);
 
+// Verificar autenticación al cargar el componente
+onMounted(() => {
+  const token = localStorage.getItem('token');
+  const rol = localStorage.getItem('rol');
+  
+  if (token && rol) {
+    if (rol === 'admin') {
+      router.push('/admin/adminIndex');
+    } else {
+      router.push('/cancion');
+    }
+  }
+});
+
 const iniciarSesion = async () => {
   try {
-    loading.value = true; // Activa el estado de carga
-
+    loading.value = true;
+    error.value = '';
+    
     const response = await usuarioServices.iniciarSesion({
       nombre_usuario: nombre_usuario.value,
       contrasena: contrasena.value,
     });
 
     if (response.token) {
-      localStorage.setItem("token", response.token);
-      router.push(
-        response.usuario.rol === "admin" ? "/admin/adminIndex" : "/cancion"
-      );
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('rol', response.usuario.rol);
+      
+      // Redirección basada en el rol
+      if (response.usuario.rol === "administrador") {
+        await router.push('/admin/adminIndex');
+      } else {
+        await router.push('/cancion');
+      }
     }
   } catch (err) {
-    error.value = "Error al iniciar sesión. Verifica tus credenciales.";
+    error.value = 'Credenciales incorrectas. Por favor, verifica tus datos.';
+    console.error('Error de autenticación:', err);
   } finally {
-    loading.value = false; // Desactiva el estado de carga
+    loading.value = false;
   }
 };
 
@@ -219,7 +239,6 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
 </script>
-
 <style>
 .animate-gradient-x {
   background-size: 200% 200%;

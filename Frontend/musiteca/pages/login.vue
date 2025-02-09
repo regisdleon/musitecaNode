@@ -39,43 +39,52 @@
   </div>
 </template>
 
-<script>
-import usuarioServices from '@/services/usuarioServices'; // Importa el servicio
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import usuarioServices from '@/services/usuarioServices';
 
-export default {
-  data() {
-    return {
-      nombre_usuario: '',
-      contrasena: '',
-      error: '', // Para manejar errores
-    };
-  },
-  methods: {
-    async iniciarSesion() {
-      try {
-        // Llama al método iniciarSesion del servicio
-        const response = await usuarioServices.iniciarSesion({
-          nombre_usuario: this.nombre_usuario,
-          contrasena: this.contrasena,
-        });
+useHead({
+  title: "Iniciar Sesión - Musiteca",
+  meta: [
+    {
+      name: "description",
+      content: "Accede a tu cuenta de Musiteca para disfrutar de tu música favorita."
+    }
+  ]
+});
 
-        // Si la respuesta es exitosa, guarda el token y redirige
-        if (response.token) {
-          localStorage.setItem('token', response.token); // Guarda el token en localStorage
-          if (response.usuario.rol === "admin") {
-            this.$router.push('/admin/adminIndex');  
-          }else{
-            this.$router.push('/'); // Redirige al dashboard o página principal
-          }
-        } else {
-          this.error = 'Error al iniciar sesión. Verifica tus credenciales.';
-        }
-      } catch (error) {
-        // Maneja errores
-        this.error = 'Error al iniciar sesión. Verifica tus credenciales.';
-        console.error('Error en iniciarSesion:', error);
+const router = useRouter();
+const nombre_usuario = ref('');
+const contrasena = ref('');
+const error = ref('');
+const loading = ref(false);
+
+const iniciarSesion = async () => {
+  try {
+    loading.value = true;
+    error.value = '';
+    
+    const response = await usuarioServices.iniciarSesion({
+      nombre_usuario: nombre_usuario.value,
+      contrasena: contrasena.value
+    });
+
+    if (response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('rol', response.usuario.rol); // Guardar rol en localStorage
+      
+      if (response.usuario.rol === "admin") {
+        await router.push('/admin/adminIndex');
+      } else {
+        await router.push('/cancion');
       }
-    },
-  },
+    }
+  } catch (err) {
+    error.value = 'Credenciales incorrectas. Por favor, verifica tus datos.';
+    console.error('Error de autenticación:', err);
+  } finally {
+    loading.value = false;
+  }
 };
 </script>

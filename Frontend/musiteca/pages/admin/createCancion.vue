@@ -163,6 +163,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useRuntimeConfig } from '#imports';
 
 const router = useRouter();
 const fileInput = ref(null);
@@ -174,11 +175,13 @@ const id_album = ref('');
 const albumes = ref([]);
 const error = ref('');
 const archivo_seleccionado = ref(null);
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:4000/api/albums', {
+    const response = await fetch(`${apiBaseUrl}/api/albums`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -205,7 +208,7 @@ const crearCancion = async () => {
     formData.append('id_album', id_album.value);
     formData.append('archivo_cancion', archivo_seleccionado.value);
 
-    const response = await fetch('http://localhost:4000/api/canciones/createCancion', {
+    const response = await fetch(`${apiBaseUrl}/api/canciones/createCancion`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData

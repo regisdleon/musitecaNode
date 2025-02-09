@@ -59,17 +59,18 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRuntimeConfig } from '#app';
+import { useRuntimeConfig } from '#imports';
 
-const config = useRuntimeConfig();
 const canciones = ref([]);
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 onMounted(async () => {
   try {
     const token = localStorage.getItem('token');
     const headers = { 'Authorization': `Bearer ${token}` };
     
-    const response = await fetch('http://localhost:4000/api/canciones', { headers });
+    const response = await fetch(`${apiBaseUrl}/api/canciones`, { headers });
     
     if (response.ok) {
       canciones.value = await response.json();

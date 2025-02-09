@@ -107,6 +107,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#imports';
 
 const artistas = ref([]);
 const showModal = ref(false);
@@ -116,6 +117,8 @@ const edicion = ref({
   inicio_actividad: '',
   pais: ''
 });
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 onMounted(async () => {
   await cargarArtistas();
@@ -124,7 +127,7 @@ onMounted(async () => {
 const cargarArtistas = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:4000/api/artistas', {
+    const response = await fetch(`${apiBaseUrl}/api/artistas`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -139,7 +142,7 @@ const cargarArtistas = async () => {
 const editarArtista = async (id) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/artistas/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/artistas/${id}`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     
@@ -157,7 +160,7 @@ const editarArtista = async (id) => {
 const guardarCambios = async () => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/artistas/${artistaEditId.value}`, {
+    const response = await fetch(`${apiBaseUrl}/api/artistas/${artistaEditId.value}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -184,7 +187,7 @@ const confirmarEliminacion = (id) => {
 const eliminarArtista = async (id) => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:4000/api/artistas/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/artistas/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     });

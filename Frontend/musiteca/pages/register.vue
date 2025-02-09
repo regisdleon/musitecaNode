@@ -82,34 +82,50 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useRuntimeConfig } from '#imports';
+
 useHead({
-  title: "Registro - Musiteca",
+  title: "Registrarse - Musiteca",
   meta: [
     {
       name: "description",
-      content: "Crea tu cuenta en Musiteca para acceder a contenido exclusivo y gestionar tu perfil musical."
-    }
-  ]
+      content: "Crear una cuenta para poder acceder al sitio.",
+    },
+  ],
 });
-
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import usuarioServices from '@/services/usuarioServices';
 
 const router = useRouter();
 const nombre_usuario = ref('');
 const contrasena = ref('');
 const error = ref('');
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 const registrar = async () => {
   try {
-    await usuarioServices.registrarUsuario({
-      nombre_usuario: nombre_usuario.value,
-      contrasena: contrasena.value
+    const response = await fetch(`${apiBaseUrl}/api/usuarios`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nombre_usuario: nombre_usuario.value,
+        contrasena: contrasena.value,
+        rol: 'usuario',
+      }),
     });
-    router.push('/login');
+
+    if (response.ok) {
+      const data = await response.json();
+      router.push('/');
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Error al registrar el usuario');
+    }
   } catch (err) {
-    error.value = 'Error al registrar. Intenta con otro nombre de usuario.';
+    error.value = err.message || 'Error al registrar el usuario';
     console.error('Error en registro:', err);
   }
 };
