@@ -1,5 +1,8 @@
-const serverHost = "http://localhost:4000/api"; // Define la URL base del backend
+import { useRuntimeConfig } from '#imports';
 
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 const getAuthHeader = () => {
   const token = localStorage.getItem('token'); // Obtiene el token del localStorage
   if (token) {
@@ -11,7 +14,7 @@ const getAuthHeader = () => {
 const cancionServices = {
   async obtenerCanciones() {
     try {
-      const response = await fetch(`${serverHost}/canciones`, {
+      const response = await fetch(`${apiBaseUrl}/api/canciones`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +31,7 @@ const cancionServices = {
 
   async crearCancion(cancion) {
     try {
-      const response = await fetch(`${serverHost}/canciones`, {
+      const response = await fetch(`${apiBaseUrl}/api/canciones`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +49,7 @@ const cancionServices = {
 
   async actualizarCancion(id, cancion) {
     try {
-      const response = await fetch(`${serverHost}/canciones/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/canciones/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +67,7 @@ const cancionServices = {
 
   async eliminarCancion(id) {
     try {
-      const response = await fetch(`${serverHost}/canciones/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/canciones/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

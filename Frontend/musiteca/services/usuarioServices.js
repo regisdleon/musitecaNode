@@ -1,4 +1,8 @@
-const serverHost = "http://localhost:4000/api"; // Define la URL base del backend
+import { useRuntimeConfig } from '#imports';
+
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 const getAuthHeader = () => {
   const token = localStorage.getItem('token'); // Obtiene el token del localStorage
@@ -11,7 +15,7 @@ const getAuthHeader = () => {
 const usuarioServices = {
   async obtenerUsuarios() {
     try {
-      const response = await fetch(`${serverHost}/usuarios`, {
+      const response = await fetch(`${apiBaseUrl}/api/usuarios`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +32,7 @@ const usuarioServices = {
 
   async registrarUsuario(usuario) {
     try {
-      const response = await fetch(`${serverHost}/usuarios`, {
+      const response = await fetch(`${apiBaseUrl}/api/usuarios`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ const usuarioServices = {
 
   async actualizarUsuario(id, usuario) {
     try {
-      const response = await fetch(`${serverHost}/usuarios/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/usuarios/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +68,7 @@ const usuarioServices = {
 
   async eliminarUsuario(id) {
     try {
-      const response = await fetch(`${serverHost}/usuarios/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/usuarios/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +85,7 @@ const usuarioServices = {
 
   async iniciarSesion(usuario) {
     try {
-      const response = await fetch(`${serverHost}/login`, {
+      const response = await fetch(`${apiBaseUrl}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +104,7 @@ const usuarioServices = {
 
   async refrescarToken(refreshToken) {
     try {
-      const response = await fetch(`${serverHost}/refresh-token`, {
+      const response = await fetch(`${apiBaseUrl}/api/refresh-token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +124,7 @@ const usuarioServices = {
 
   async obtenerPerfil() {
     try {
-      const response = await fetch(`${serverHost}/perfil`, {
+      const response = await fetch(`${apiBaseUrl}/api/perfil`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

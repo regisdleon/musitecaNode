@@ -1,4 +1,8 @@
-const serverHost = "http://localhost:4000/api"; // Define la URL base del backend
+import { useRuntimeConfig } from '#imports';
+
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 const getAuthHeader = () => {
   const token = localStorage.getItem('token'); // Obtiene el token del localStorage
@@ -11,7 +15,7 @@ const getAuthHeader = () => {
 const opinionServices = {
   async obtenerOpiniones() {
     try {
-      const response = await fetch(`${serverHost}/opiniones`, {
+      const response = await fetch(`${apiBaseUrl}/api/opiniones`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +32,7 @@ const opinionServices = {
 
   async crearOpinion(opinion) {
     try {
-      const response = await fetch(`${serverHost}/opiniones`, {
+      const response = await fetch(`${apiBaseUrl}/api/opiniones`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ const opinionServices = {
 
   async actualizarOpinion(id, opinion) {
     try {
-      const response = await fetch(`${serverHost}/opiniones/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/opiniones/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +68,7 @@ const opinionServices = {
 
   async eliminarOpinion(id) {
     try {
-      const response = await fetch(`${serverHost}/opiniones/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/opiniones/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

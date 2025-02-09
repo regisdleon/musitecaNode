@@ -1,4 +1,8 @@
-const serverHost = "http://localhost:4000/api"; // Define la URL base del backend
+import { useRuntimeConfig } from '#imports';
+
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL; // Define la URL base del backend
 
 const getAuthHeader = () => {
   const token = localStorage.getItem('token'); // Obtiene el token del localStorage
@@ -11,7 +15,7 @@ const getAuthHeader = () => {
 const albumServices = {
   async obtenerAlbums() {
     try {
-      const response = await fetch(`${serverHost}/albums`, {
+      const response = await fetch(`${apiBaseUrl}/api/albums`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +32,7 @@ const albumServices = {
 
   async crearAlbum(album) {
     try {
-      const response = await fetch(`${serverHost}/albums`, {
+      const response = await fetch(`${apiBaseUrl}/api/albums`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ const albumServices = {
 
   async actualizarAlbum(id, album) {
     try {
-      const response = await fetch(`${serverHost}/albums/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/albums/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +68,7 @@ const albumServices = {
 
   async eliminarAlbum(id) {
     try {
-      const response = await fetch(`${serverHost}/albums/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/albums/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

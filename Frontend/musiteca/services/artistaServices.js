@@ -1,4 +1,8 @@
-const serverHost = "http://localhost:4000/api"; // Define la URL base del backend
+import { useRuntimeConfig } from '#imports';
+
+
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.BACKEND_URL;
 
 const getAuthHeader = () => {
   const token = localStorage.getItem('token'); // Obtiene el token del localStorage
@@ -11,7 +15,7 @@ const getAuthHeader = () => {
 const artistaServices = {
   async obtenerArtistas() {
     try {
-      const response = await fetch(`${serverHost}/artistas`, {
+      const response = await fetch(`${apiBaseUrl}/api/artistas`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +32,7 @@ const artistaServices = {
 
   async crearArtista(artista) {
     try {
-      const response = await fetch(`${serverHost}/artistas`, {
+      const response = await fetch(`${apiBaseUrl}/api/artistas`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +50,7 @@ const artistaServices = {
 
   async actualizarArtista(id, artista) {
     try {
-      const response = await fetch(`${serverHost}/artistas/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/artistas/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +68,7 @@ const artistaServices = {
 
   async eliminarArtista(id) {
     try {
-      const response = await fetch(`${serverHost}/artistas/${id}`, {
+      const response = await fetch(`${apiBaseUrl}/api/artistas/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
