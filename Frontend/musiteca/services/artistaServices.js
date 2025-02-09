@@ -32,6 +32,7 @@ const artistaServices = {
 
   async crearArtista(artista) {
     try {
+      console.log('Enviando solicitud a la API:', artista);
       const response = await fetch(`${apiBaseUrl}/api/artistas`, {
         method: 'POST',
         headers: {
