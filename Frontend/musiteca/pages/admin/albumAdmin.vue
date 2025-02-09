@@ -1,25 +1,120 @@
 <template>
-  <div>
-    <NuxtLink to="createAlbum">Crear un nuevo Album</NuxtLink>
-    <h1>Albumes</h1>
-    <div>
-      <ol>
-        <li v-for="album in albums" :key="album.id">
-          <strong>ID:</strong> {{ album.id }},
-          <strong>Nombre:</strong> {{ album.nombre_album }},
-          <strong>Fecha:</strong> {{ album.fecha_album }},
-          <strong>Duración:</strong> {{ album.duracion_album }},
-          <strong>Cantidad de canciones:</strong> {{ album.cantidad_canciones }},
-          <strong>Tipo:</strong> {{ album.tipo }},
-          <strong>Nombre Artista:</strong> {{ album.artistum ? album.artistum.nombre_artistico : 'Desconocido' }}
-          <button @click="editarAlbum(album.id)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
-            Editar
-          </button>
-          <button @click="eliminarAlbum(album.id)" class="bg-red-400 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
-            Eliminar
-          </button>
-        </li>
-      </ol>
+  <div class="min-h-screen bg-gradient-to-b from-purple-50 to-cyan-50 p-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Encabezado -->
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-500">
+          🎧 Gestión de Álbumes
+        </h1>
+        <NuxtLink 
+          to="createAlbum"
+          class="bg-gradient-to-r from-purple-500 to-cyan-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-cyan-600 transition-all flex items-center"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Nuevo Álbum
+        </NuxtLink>
+      </div>
+
+      <!-- Lista de Álbumes -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div 
+          v-for="album in albums" 
+          :key="album.id"
+          class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all p-6 border border-purple-100"
+        >
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h2 class="text-xl font-bold text-purple-800">{{ album.nombre_album }}</h2>
+              <p class="text-sm text-cyan-600">{{ album.artistum?.nombre_artistico || 'Artista Desconocido' }}</p>
+            </div>
+            <span class="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">
+              {{ album.tipo }}
+            </span>
+          </div>
+
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-500">Fecha:</span>
+              <span class="text-gray-700">{{ album.fecha_album }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Duración:</span>
+              <span class="text-gray-700">{{ album.duracion_album }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Canciones:</span>
+              <span class="text-gray-700">{{ album.cantidad_canciones }}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2 mt-4">
+            <button 
+              @click="editarAlbum(album.id)"
+              class="text-purple-500 hover:text-purple-700 transition-colors p-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+              </svg>
+            </button>
+            <button 
+              @click="confirmarEliminacion(album.id)"
+              class="text-red-400 hover:text-red-600 transition-colors p-2"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Edición -->
+      <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md">
+          <h3 class="text-xl font-bold mb-4">Editar Álbum</h3>
+          <form @submit.prevent="guardarCambios">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                <input v-model="edicion.nombre_album" type="text" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+                <input v-model="edicion.fecha_album" type="date" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Duración</label>
+                <input v-model="edicion.duracion_album" type="text" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Canciones</label>
+                <input v-model="edicion.cantidad_canciones" type="number" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+                <input v-model="edicion.tipo" type="text" class="w-full px-4 py-2 border rounded-lg">
+              </div>
+            </div>
+            <div class="flex justify-end space-x-4 mt-6">
+              <button 
+                type="button"
+                @click="showModal = false"
+                class="px-4 py-2 text-gray-500 hover:text-gray-700"
+              >
+                Cancelar
+              </button>
+              <button 
+                type="submit"
+                class="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -27,138 +122,98 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-// Variable reactiva para almacenar la lista de albums
 const albums = ref([]);
+const showModal = ref(false);
+const albumEditId = ref(null);
+const edicion = ref({
+  nombre_album: '',
+  fecha_album: '',
+  duracion_album: '',
+  cantidad_canciones: '',
+  tipo: ''
+});
 
-// Función que se ejecuta cuando el componente se monta
 onMounted(async () => {
   await cargarAlbums();
 });
 
-// Función para cargar los álbumes
 const cargarAlbums = async () => {
   try {
     const token = localStorage.getItem('token');
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-    };
-
     const response = await fetch('http://localhost:4000/api/albums', {
-      headers,
+      headers: { 'Authorization': `Bearer ${token}` }
     });
-
+    
     if (response.ok) {
-      const data = await response.json();
-      albums.value = data;
-    } else {
-      console.error('Error mostrando albums:', response.statusText);
+      albums.value = await response.json();
     }
   } catch (error) {
-    console.error('Error mostrando albums:', error);
-  }
-};
-
-// Función para eliminar un álbum
-const eliminarAlbum = async (id) => {
-  try {
-    const token = localStorage.getItem('token');
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    };
-
-    const response = await fetch(`http://localhost:4000/api/albums/${id}`, {
-      method: 'DELETE',
-      headers,
-    });
-
-    if (response.ok) {
-      // Recargar la lista de álbumes después de eliminar
-      alert("Album eliminado.")
-      await cargarAlbums();
-    } else {
-      console.error('Error eliminando el álbum:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error eliminando el álbum:', error);
+    console.error('Error cargando álbumes:', error);
   }
 };
 
 const editarAlbum = async (id) => {
   try {
-    // Recuperar los datos del álbum que se está editando
     const token = localStorage.getItem('token');
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-    };
-
     const response = await fetch(`http://localhost:4000/api/albums/${id}`, {
-      headers,
+      headers: { 'Authorization': `Bearer ${token}` }
     });
-
+    
     if (response.ok) {
       const data = await response.json();
-
-      // Crear un formulario de edición
-      const formulario = document.createElement('form');
-      formulario.innerHTML = `
-        <label for="nombre_album">Nombre del álbum:</label>
-        <input type="text" id="nombre_album" value="${data.nombre_album}"><br>
-        <label for="fecha_album">Fecha del álbum:</label>
-        <input type="date" id="fecha_album" value="${data.fecha_album}"><br>
-        <label for="duracion_album">Duración del álbum:</label>
-        <input type="text" id="duracion_album" value="${data.duracion_album}"><br>
-        <label for="cantidad_canciones">Cantidad de canciones:</label>
-        <input type="number" id="cantidad_canciones" value="${data.cantidad_canciones}"><br>
-        <label for="tipo">Tipo de álbum:</label>
-        <input type="text" id="tipo" value="${data.tipo}"><br>
-        <button type="submit">Guardar cambios</button>
-      `;
-
-      // Agregar el formulario a la página
-      document.body.appendChild(formulario);
-
-      // Agregar un evento de submit al formulario
-      formulario.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // Recuperar los datos del formulario
-        const nombre_album = document.getElementById('nombre_album').value;
-        const fecha_album = document.getElementById('fecha_album').value;
-        const duracion_album = document.getElementById('duracion_album').value;
-        const cantidad_canciones = document.getElementById('cantidad_canciones').value;
-        const tipo = document.getElementById('tipo').value;
-
-        // Actualizar los datos del álbum en la base de datos
-        const respuesta = await fetch(`http://localhost:4000/api/albums/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            nombre_album,
-            fecha_album,
-            duracion_album,
-            cantidad_canciones,
-            tipo,
-          }),
-        });
-
-        // Recargar la lista de álbumes después de editar
-        await cargarAlbums();
-        formulario.remove();
-      });
-    } else {
-      console.error('Error al editar el álbum:', response.statusText);
+      edicion.value = { ...data };
+      albumEditId.value = id;
+      showModal.value = true;
     }
   } catch (error) {
-    console.error('Error al editar el álbum:', error);
+    console.error('Error editando álbum:', error);
   }
 };
 
-// Definimos la metadata de la página
+const guardarCambios = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:4000/api/albums/${albumEditId.value}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(edicion.value)
+    });
+
+    if (response.ok) {
+      await cargarAlbums();
+      showModal.value = false;
+    }
+  } catch (error) {
+    console.error('Error guardando cambios:', error);
+  }
+};
+
+const confirmarEliminacion = (id) => {
+  if (confirm('¿Estás seguro de eliminar este álbum?')) {
+    eliminarAlbum(id);
+  }
+};
+
+const eliminarAlbum = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:4000/api/albums/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (response.ok) {
+      await cargarAlbums();
+    }
+  } catch (error) {
+    console.error('Error eliminando álbum:', error);
+  }
+};
+
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
 });
 </script>

@@ -78,11 +78,11 @@ app.use('/api/protegido', verificarToken, verificarRol('admin'), (req, res) => {
 });
 
 // Rutas de la API
-app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/artistas', artistaRoutes);
-app.use('/api/albumes', albumRoutes);
-app.use('/api/canciones', cancionRoutes);
-app.use('/api/opiniones', opinionRoutes);
+app.use('/api', usuarioRoutes);
+app.use('/api', artistaRoutes);
+app.use('/api', albumRoutes);
+app.use('/api', cancionRoutes);
+app.use('/api', opinionRoutes);
 
 // ======================================
 // Sincronización de Base de Datos

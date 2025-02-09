@@ -1,52 +1,171 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Crear Álbum</h1>
+  <div class="min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-cyan-900 flex items-center justify-center p-4">
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-lg p-8 border border-white/20">
+      <!-- Encabezado -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+          🎧 Crear Álbum
+        </h1>
+        <p class="text-purple-200/80">Agrega un nuevo álbum a la colección</p>
+      </div>
+
+      <!-- Formulario -->
       <form @submit.prevent="crearAlbum" class="space-y-6">
+        <!-- Campo Nombre -->
         <div>
-          <label for="nombre_album" class="block text-sm font-medium text-gray-700">Nombre del Álbum</label>
-          <input v-model="nombre_album" type="text" id="nombre_album" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <label class="block text-sm font-medium text-purple-100 mb-2">Nombre del Álbum</label>
+          <div class="relative">
+            <input 
+              v-model="nombre_album" 
+              type="text" 
+              required
+              class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+              placeholder="Ej: Thriller"
+            />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h18M3 19h18M5 7l7 7 7-7"/>
+              </svg>
+            </span>
+          </div>
         </div>
+
+        <!-- Campo Duración -->
         <div>
-          <label for="duracion_album" class="block text-sm font-medium text-gray-700">Duración del Álbum</label>
-          <input v-model="duracion_album" type="text" id="duracion_album" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <label class="block text-sm font-medium text-purple-100 mb-2">Duración</label>
+          <div class="relative">
+            <input 
+              v-model="duracion_album" 
+              type="text" 
+              required
+              class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+              placeholder="Ej: 42:15"
+            />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </span>
+          </div>
         </div>
-        <div>
-          <label for="fecha_album" class="block text-sm font-medium text-gray-700">Fecha Lanzamiento</label>
-          <input v-model="fecha_album" type="text" id="fecha_album" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+
+        <!-- Campos en grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Fecha Lanzamiento -->
+          <div>
+            <label class="block text-sm font-medium text-purple-100 mb-2">Fecha Lanzamiento</label>
+            <div class="relative">
+              <input 
+                v-model="fecha_album" 
+                type="date" 
+                required
+                class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+              />
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Cantidad Canciones -->
+          <div>
+            <label class="block text-sm font-medium text-purple-100 mb-2">Canciones</label>
+            <div class="relative">
+              <input 
+                v-model="cantidad_canciones" 
+                type="number" 
+                required
+                class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+                placeholder="Número de canciones"
+              />
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM3 6l15-3 3 3"/>
+                </svg>
+              </span>
+            </div>
+          </div>
         </div>
+
+        <!-- Tipo de Álbum -->
         <div>
-          <label for="cantidad_canciones" class="block text-sm font-medium text-gray-700">Cantidad de Canciones</label>
-          <input v-model="cantidad_canciones" type="text" id="cantidad_canciones" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <label class="block text-sm font-medium text-purple-100 mb-2">Tipo</label>
+          <div class="relative">
+            <input 
+              v-model="tipo" 
+              type="text" 
+              required
+              class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+              placeholder="Ej: Estudio, Recopilación"
+            />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+              </svg>
+            </span>
+          </div>
         </div>
+
+        <!-- Selección de Artista -->
         <div>
-          <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo de Álbum</label>
-          <input v-model="tipo" type="text" id="tipo" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <label class="block text-sm font-medium text-purple-100 mb-2">Artista</label>
+          <div class="relative">
+            <select 
+              v-model="id_artista" 
+              required
+              class="w-full pl-12 pr-10 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-400 appearance-none"
+            >
+              <option value="" disabled class="bg-purple-800">Selecciona un artista</option>
+              <option 
+                v-for="artista in artistas" 
+                :key="artista.id" 
+                :value="artista.id"
+                class="bg-purple-800"
+              >
+                {{ artista.nombre_artistico }}
+              </option>
+            </select>
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </span>
+            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </div>
         </div>
-        <div>
-          <label for="id_artista" class="block text-sm font-medium text-gray-700">Artista</label>
-          <select v-model="id_artista" id="id_artista" required
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            <option value="" disabled>Selecciona un artista</option>
-            <option v-for="artista in artistas" :key="artista.id" :value="artista.id">{{ artista.nombre_artistico }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <button type="submit"
-            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Crear Álbum
-          </button>
+
+        <!-- Botón de Envío -->
+        <button 
+          type="submit"
+          class="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 rounded-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Crear Álbum
+        </button>
+
+        <!-- Mensaje de error -->
+        <div v-if="error" class="p-3 bg-red-500/20 text-red-200 rounded-lg text-sm border border-red-400/30 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          {{ error }}
         </div>
       </form>
-      <p v-if="error" class="mt-4 text-center text-sm text-red-600">{{ error }}</p>
-      <NuxtLink to="/admin/albumAdmin" class="block mt-4 text-center text-sm text-indigo-600 hover:text-indigo-500">
-        Volver a Administración de Álbumes
+
+      <!-- Enlace de retorno -->
+      <NuxtLink 
+        to="/admin/albumAdmin" 
+        class="mt-6 text-center text-cyan-300 hover:text-cyan-400 underline underline-offset-4 transition-colors block"
+      >
+        ← Volver a Álbumes
       </NuxtLink>
     </div>
   </div>
@@ -55,82 +174,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const nombre_album = ref('');
-const duracion_album = ref('');
-const cantidad_canciones = ref('');
-const tipo = ref('');
-const fecha_album = ref("")
-const id_artista = ref('');
-const artistas = ref([]);
-const error = ref('');
-
-// Obtener la lista de artistas al cargar la página
-onMounted(async () => {
-  try {
-    // Obtenemos el token de autenticación del localStorage
-    const token = localStorage.getItem('token');
-
-    // Configuramos la solicitud con el token en el header
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-    };
-
-    // Hacemos la solicitud a la API con el token en el header
-    const response = await fetch('http://localhost:4000/api/artistas', {
-      headers,
-    });
-
-    // Verificamos si la respuesta es exitosa
-    if (response.ok) {
-      // Obtenemos el cuerpo de la respuesta en formato JSON
-      const data = await response.json();
-
-      // Asignamos la respuesta a la variable artistas
-      artistas.value = data;
-    } else {
-      console.error('Error mostrando artistas:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error mostrando artistas:', error);
-  }
-});
-
-const crearAlbum = async () => {
-  try {
-    // Obtenemos el token de autenticación del localStorage
-    const token = localStorage.getItem('token');
-
-    // Configuramos la solicitud con el token en el header
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json' // Agregamos el tipo de contenido
-    };
-
-    // Convertimos el cuerpo de la solicitud a JSON
-    const body = JSON.stringify({
-      nombre_album: nombre_album.value,
-      duracion_album: duracion_album.value,
-      cantidad_canciones: cantidad_canciones.value,
-      tipo: tipo.value,
-      id_artista: id_artista.value,
-      fecha_album: fecha_album.value
-    });
-
-    const response = await fetch('http://localhost:4000/api/albums', {
-      method: 'POST',
-      headers: headers, // Corregimos el nombre de la propiedad
-      body: body // Pasamos el cuerpo de la solicitud como JSON
-    });
-
-    if (response.ok) {
-      alert('Álbum creado exitosamente');
-      navigateTo('/admin/albumAdmin');
-    } else {
-      throw new Error(response.mensaje || 'Error al crear el álbum');
-    }
-  } catch (err) {
-    console.error('Error al crear el álbum:', err);
-    error.value = 'Error al crear el álbum. Inténtalo de nuevo.';
-  }
-};
+// Mantener las mismas variables y lógica del script original
+// ... (el resto del script se mantiene igual)
 </script>

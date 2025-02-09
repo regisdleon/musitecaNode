@@ -1,123 +1,117 @@
 <template>
-    <div class="create-artista-container">
-      <h1>Crear Artista</h1>
-      <form @submit.prevent="crearArtista" class="create-artista-form">
-        <div class="form-group">
-          <label for="nombre_artistico">Nombre Artístico:</label>
-          <input
-            type="text"
-            id="nombre_artistico"
-            v-model="artista.nombre_artistico"
-            required
-            placeholder="Ingrese el nombre artístico"
-          />
-        </div>
-  
-        <div class="form-group">
-          <label for="inicio_actividad">Inicio de Actividad:</label>
-          <input
-            type="text"
-            id="inicio_actividad"
-            v-model="artista.inicio_actividad"
-            required
-          />
-        </div>
-  
-        <div class="form-group">
-          <label for="pais">País:</label>
-          <input
-            type="text"
-            id="pais"
-            v-model="artista.pais"
-            required
-            placeholder="Ingrese el país"
-          />
-        </div>
-  
-        <button type="submit" class="submit-button">Crear Artista</button>
+  <div class="min-h-screen bg-gradient-to-br from-purple-900 via-purple-700 to-cyan-900 flex items-center justify-center p-4">
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md p-8 border border-white/20">
+      <!-- Encabezado -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+          🎤 Crear Artista
+        </h1>
+        <p class="text-purple-200/80">Registra un nuevo artista en la plataforma</p>
+      </div>
 
-        <NuxtLink to="/admin/artistaAdmin" class="block mt-4 text-center text-sm text-indigo-600 hover:text-indigo-500">
-        Volver a Administración de Artistas
-      </NuxtLink>
+      <!-- Formulario -->
+      <form @submit.prevent="crearArtista" class="space-y-6">
+        <!-- Nombre Artístico -->
+        <div>
+          <label class="block text-sm font-medium text-purple-100 mb-2">Nombre Artístico</label>
+          <div class="relative">
+            <input
+              type="text"
+              v-model="artista.nombre_artistico"
+              required
+              placeholder="Ej: Michael Jackson"
+              class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+            />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Inicio Actividad -->
+        <div>
+          <label class="block text-sm font-medium text-purple-100 mb-2">Inicio de Actividad</label>
+          <div class="relative">
+            <input
+              type="date"
+              v-model="artista.inicio_actividad"
+              required
+              class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+            />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- País -->
+        <div>
+          <label class="block text-sm font-medium text-purple-100 mb-2">País</label>
+          <div class="relative">
+            <input
+              type="text"
+              v-model="artista.pais"
+              required
+              placeholder="Ej: Estados Unidos"
+              class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
+            />
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <!-- Botón de Envío -->
+        <button
+          type="submit"
+          class="w-full py-3 px-6 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 rounded-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+        >
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Crear Artista
+        </button>
+
+        <!-- Enlace de retorno -->
+        <NuxtLink 
+          to="/admin/artistaAdmin" 
+          class="mt-4 text-center text-cyan-300 hover:text-cyan-400 underline underline-offset-4 transition-colors block"
+        >
+          ← Volver a Artistas
+        </NuxtLink>
       </form>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  import artistaServices from '@/services/artistaServices'; // Asegúrate de importar el servicio correcto
-  
-  // Datos del artista
-  const artista = ref({
-    nombre_artistico: '',
-    inicio_actividad: '',
-    pais: '',
-  });
-  
-  // Función para crear un artista
-  const crearArtista = async () => {
-    try {
-      await artistaServices.crearArtista(artista.value);
-      alert('Artista creado exitosamente');
-      // Limpiar el formulario después de crear
-      artista.value = {
-        nombre_artistico: '',
-        inicio_actividad: '',
-        pais: '',
-      };
-    } catch (error) {
-      console.error('Error al crear el artista:', error);
-      alert('Hubo un error al crear el artista');
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .create-artista-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import artistaServices from '@/services/artistaServices';
+
+const artista = ref({
+  nombre_artistico: '',
+  inicio_actividad: '',
+  pais: '',
+});
+
+const crearArtista = async () => {
+  try {
+    await artistaServices.crearArtista(artista.value);
+    alert('Artista creado exitosamente');
+    artista.value = {
+      nombre_artistico: '',
+      inicio_actividad: '',
+      pais: '',
+    };
+  } catch (error) {
+    console.error('Error al crear el artista:', error);
+    alert('Hubo un error al crear el artista');
   }
-  
-  .create-artista-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .form-group label {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .form-group input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .submit-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-  </style>
+};
+</script>
