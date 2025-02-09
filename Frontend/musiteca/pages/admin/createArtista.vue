@@ -35,7 +35,7 @@
           <label class="block text-sm font-medium text-purple-100 mb-2">Inicio de Actividad</label>
           <div class="relative">
             <input
-              type="date"
+              type="text"
               v-model="artista.inicio_actividad"
               required
               class="w-full pl-12 pr-4 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 text-purple-100 placeholder-purple-200/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
