@@ -1,77 +1,81 @@
+// nuxt.config.js
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/image',
-    '@sidebase/nuxt-auth',
+    '@sidebase/nuxt-auth'
   ],
+
   runtimeConfig: {
     public: {
-      host: '0.0.0.0',
-      BACKEND_URL: process.env.BACKEND_URL,
-      FRONTEND_URL: process.env.FRONTEND_URL,
-      port: 1000
-    },
+      BACKEND_URL: process.env.NUXT_PUBLIC_BACKEND_URL, // Corregido: prefijo NUXT_PUBLIC_
+      FRONTEND_URL: process.env.NUXT_PUBLIC_FRONTEND_URL // Corregido: prefijo NUXT_PUBLIC_
+    }
   },
 
   app: {
     head: {
-      title: "Musiteca - Escucha musica",
+      title: "Musiteca - Escucha música",
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        {
-          hid: "description",
-          name: "description",
-          content: "Escuha musica",
+        { 
+          hid: "description", 
+          name: "description", 
+          content: "Disfruta de tu música favorita" 
         },
-        { name: "keywords", content: "Escucha musica" },
-        { name: "author", content: "Regis Brayan de LRon Cabeza" },
-        { property: "og:title", content: "Musiteca - escucha musica" },
-        { property: "og:description", content: "Escuchar musica" },
-        { property: "og:image", content: "/logoMusiteca.png" }, // Ruta de tu logo
-        { property: "og:url", content: "https://musitecanode.onrender.com" }, // URL de tu sitio
+        { 
+          property: "og:image", 
+          content: process.env.NUXT_PUBLIC_FRONTEND_URL + "/logoMusiteca.png" // URL absoluta
+        },
+        // ... resto de meta tags
       ],
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
-    },
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }
+      ]
+    }
   },
 
-
   auth: {
-    globalAppMiddleware: false, // Desactiva el middleware global
+    globalAppMiddleware: true, // Habilitado para mejor seguridad
     provider: {
       type: 'local',
       endpoints: {
-        signIn: { path: '/api/iniciar-sesion', method: 'post' },
-        signOut: { path: '/api/cerrar-sesion', method: 'post' },
-        getSession: { path: '/api/perfil', method: 'get' },
+        signIn: { path: '/api/auth/login', method: 'post' }, // Endpoint corregido
+        signOut: { path: '/api/auth/logout', method: 'post' },
+        getSession: { path: '/api/auth/session', method: 'get' }
       },
       token: {
-        signInResponseTokenPointer: '/token',
-      },
-    },
+        signInResponseTokenPointer: '/data/token' // Ajusta según respuesta de tu API
+      }
+    }
   },
-
 
   nitro: {
     devProxy: {
       '/api': {
-        target: 'http://localhost:8080', // Asegúrate que este es el puerto correcto de tu backend
+        target: process.env.NUXT_PUBLIC_BACKEND_URL || 'http://localhost:8080',
         changeOrigin: true,
-        prependPath: true,
+        prependPath: true
       }
     },
-    cors: {
-      origin: '*',
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-      credentials: true,
-      allowHeaders: ['Content-Type', 'Authorization']
+    routeRules: {
+      '/api/**': {
+        cors: true,
+        headers: {
+          'Access-Control-Allow-Origin': process.env.NUXT_PUBLIC_FRONTEND_URL || '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        }
+      }
     }
+  },
 
-  },  
+  imports: {
+    dirs: ['stores'] // Si usas Pinia
+  },
 
-    // ...
-  
-    // ...
-
-  compatibilityDate: '2025-01-15',
-});
+  typescript: {
+    strict: true
+  }
+})
