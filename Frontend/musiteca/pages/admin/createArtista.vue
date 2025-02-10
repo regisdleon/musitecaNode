@@ -115,7 +115,6 @@ const crearArtista = async () => {
 
     await artistaServices.crearArtista({
       ...artista.value,
-      inicio_actividad: new Date(artista.value.inicio_actividad).toISOString() // Formatea la fecha
     });
 
     alert('Artista creado exitosamente');
