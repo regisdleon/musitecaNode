@@ -96,23 +96,35 @@ import artistaServices from '@/services/artistaServices';
 
 const artista = ref({
   nombre_artistico: '',
-  inicio_actividad: '',
+  inicio_actividad: '', // Debe ser una fecha válida
   pais: '',
 });
 
 const crearArtista = async () => {
   try {
-    console.log('Enviando solicitud a la API...');
-    await artistaServices.crearArtista(artista.value);
+    if (!localStorage.getItem('token')) {
+      alert('Debes iniciar sesión primero');
+      return navigateTo('/login');
+    }
+
+    // Validación básica
+    if (!artista.value.nombre_artistico || !artista.value.inicio_actividad) {
+      alert('Todos los campos son obligatorios');
+      return;
+    }
+
+    await artistaServices.crearArtista({
+      ...artista.value,
+      inicio_actividad: new Date(artista.value.inicio_actividad).toISOString() // Formatea la fecha
+    });
+
     alert('Artista creado exitosamente');
-    artista.value = {
-      nombre_artistico: '',
-      inicio_actividad: '',
-      pais: '',
-    };
+    artista.value = { nombre_artistico: '', inicio_actividad: '', pais: '' };
+    navigateTo('/admin/artistaAdmin');
+    
   } catch (error) {
-    console.error('Error al crear el artista:', error);
-    alert('Hubo un error al crear el artista');
+    console.error('Error completo:', error);
+    alert(error.message || 'Error al crear el artista');
   }
 };
 </script>
